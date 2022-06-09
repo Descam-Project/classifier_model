@@ -24,13 +24,17 @@ def run_app():
     data = {"success": False, "output": []}
     try:
         params = request.get_json()
+        print(params)
         if params is None:
             return jsonify(data)
-        if(params != None):
-            output = run_prediction(params['input'])
+        if params:
+            output = run_prediction(params)
+
+            print(output)
 
             data["success"] = True
             data["output"] = output
+
     except:
         print("Get exception")
     return jsonify(data)
@@ -96,6 +100,7 @@ def run_prediction(input):
     return prediction
 
 
+model = tf.keras.models.load_model("model1.h5")
+
 if __name__ == "__main__":
-    model = tf.keras.models.load_model("model1.h5")
     app.run(host='127.0.0.1', port=int(os.environ.get("PORT", 8080)))
